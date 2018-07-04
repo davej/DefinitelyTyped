@@ -17,7 +17,7 @@ type MutateFn<T> = (draft: T) => void;
 type Mutator<T> = (mutator: MutateFn<T>) => void;
 
 // any instead of T due to selector
-type RenderFn<T> = (state: any, mutate: MutateFn<T>) => JSX.Element | JSX.Element[] | null;
+type RenderFn<T> = (...state: any) => JSX.Element | JSX.Element[] | null;
 
 interface ConsumerProps<T> {
     select?: ((state: T) => any)[];
