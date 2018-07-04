@@ -13,7 +13,7 @@ interface ProviderProps {
 
 declare class Provider extends Component<ProviderProps, any> {}
 
-type MutateFn<T> = (draft: T) => void;
+type MutateFn<T> = (draft: T, state: Readonly<T>) => void;
 type Mutator<T> = (mutator: MutateFn<T>) => void;
 
 // any instead of T due to selector
