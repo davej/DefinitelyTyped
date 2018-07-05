@@ -7,22 +7,38 @@
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 // TypeScript Version: 2.2
 
-export function reach<T>(schema: Schema<T>, path: string, value?: any, context?: any): Schema<T>;
-export function addMethod<T extends Schema<any>>(schemaCtor: AnySchemaConstructor, name: string, method: (this: T, ...args: any[]) => T): void;
-export function ref(path: string, options?: { contextPrefix: string }): Ref;
-export function lazy<T>(fn: (value: T) => Schema<T>): Lazy;
-export function ValidationError(errors: string | string[], value: any, path: string, type?: any): ValidationError;
+declare module 'yup' {
+  export function reach<T>(
+    schema: Schema<T>,
+    path: string,
+    value?: any,
+    context?: any
+  ): Schema<T>;
+  export function addMethod<T extends Schema<any>>(
+    schemaCtor: AnySchemaConstructor,
+    name: string,
+    method: (this: T, ...args: any[]) => T
+  ): void;
+  export function ref(path: string, options?: { contextPrefix: string }): Ref;
+  export function lazy<T>(fn: (value: T) => Schema<T>): Lazy;
+  export function ValidationError(
+    errors: string | string[],
+    value: any,
+    path: string,
+    type?: any
+  ): ValidationError;
 
-export const mixed: MixedSchemaConstructor;
-export const string: StringSchemaConstructor;
-export const number: NumberSchemaConstructor;
-export const boolean: BooleanSchemaConstructor;
-export const bool: BooleanSchemaConstructor;
-export const date: DateSchemaConstructor;
-export const array: ArraySchemaConstructor;
-export const object: ObjectSchemaConstructor;
+  export const mixed: MixedSchemaConstructor;
+  export const string: StringSchemaConstructor;
+  export const number: NumberSchemaConstructor;
+  export const boolean: BooleanSchemaConstructor;
+  export const bool: BooleanSchemaConstructor;
+  export const date: DateSchemaConstructor;
+  export const array: ArraySchemaConstructor;
+  export const object: ObjectSchemaConstructor;
 
-export type AnySchemaConstructor = MixedSchemaConstructor
+  export type AnySchemaConstructor =
+    | MixedSchemaConstructor
     | StringSchemaConstructor
     | NumberSchemaConstructor
     | BooleanSchemaConstructor
@@ -30,7 +46,7 @@ export type AnySchemaConstructor = MixedSchemaConstructor
     | ArraySchemaConstructor
     | ObjectSchemaConstructor;
 
-export interface Schema<T> {
+  export interface Schema<T> {
     clone(): this;
     label(label: string): this;
     meta(metadata: any): this;
@@ -54,43 +70,52 @@ export interface Schema<T> {
     oneOf(arrayOfValues: any[], message?: string): this;
     notOneOf(arrayOfValues: any[], message?: string): this;
     when(keys: string | any[], builder: WhenOptions<this>): this;
-    test(name: string, message: string, test: (this: TestContext, value?: any) => boolean | Promise<boolean>, callbackStyleAsync?: boolean): this;
+    test(
+      name: string,
+      message: string,
+      test: (this: TestContext, value?: any) => boolean | Promise<boolean>,
+      callbackStyleAsync?: boolean
+    ): this;
     test(options: TestOptions): this;
     transform(fn: TransformFunction<this>): this;
-}
+  }
 
-export interface MixedSchemaConstructor {
+  export interface MixedSchemaConstructor {
     (): MixedSchema;
-    new(options?: { type?: string, [key: string]: any }): MixedSchema;
-}
+    new (options?: { type?: string; [key: string]: any }): MixedSchema;
+  }
 
-// tslint:disable-next-line:no-empty-interface
-export interface MixedSchema extends Schema<any> {
-}
+  // tslint:disable-next-line:no-empty-interface
+  export interface MixedSchema extends Schema<any> {}
 
-export interface StringSchemaConstructor {
+  export interface StringSchemaConstructor {
     (): StringSchema;
-    new(): StringSchema;
-}
+    new (): StringSchema;
+  }
 
-export interface StringSchema extends Schema<string> {
+  export interface StringSchema extends Schema<string> {
     min(limit: number | Ref, message?: string): StringSchema;
     max(limit: number | Ref, message?: string): StringSchema;
-    matches(regex: RegExp, messageOrOptions?: string | { message?: string; excludeEmptyString?: boolean }): StringSchema;
+    matches(
+      regex: RegExp,
+      messageOrOptions?:
+        | string
+        | { message?: string; excludeEmptyString?: boolean }
+    ): StringSchema;
     email(message?: string): StringSchema;
     url(message?: string): StringSchema;
     ensure(): StringSchema;
     trim(message?: string): StringSchema;
     lowercase(message?: string): StringSchema;
     uppercase(message?: string): StringSchema;
-}
+  }
 
-export interface NumberSchemaConstructor {
+  export interface NumberSchemaConstructor {
     (): NumberSchema;
-    new(): NumberSchema;
-}
+    new (): NumberSchema;
+  }
 
-export interface NumberSchema extends Schema<number> {
+  export interface NumberSchema extends Schema<number> {
     min(limit: number | Ref, message?: string): NumberSchema;
     max(limit: number | Ref, message?: string): NumberSchema;
     lessThan(limit: number | Ref, message?: string): NumberSchema;
@@ -99,77 +124,84 @@ export interface NumberSchema extends Schema<number> {
     negative(message?: string): NumberSchema;
     integer(message?: string): NumberSchema;
     truncate(): NumberSchema;
-    round(type: "floor" | "ceil" | "trunc" | "round"): NumberSchema;
-}
+    round(type: 'floor' | 'ceil' | 'trunc' | 'round'): NumberSchema;
+  }
 
-export interface BooleanSchemaConstructor {
+  export interface BooleanSchemaConstructor {
     (): BooleanSchema;
-    new(): BooleanSchema;
-}
+    new (): BooleanSchema;
+  }
 
-// tslint:disable-next-line:no-empty-interface
-export interface BooleanSchema extends Schema<boolean> {
-}
+  // tslint:disable-next-line:no-empty-interface
+  export interface BooleanSchema extends Schema<boolean> {}
 
-export interface DateSchemaConstructor {
+  export interface DateSchemaConstructor {
     (): DateSchema;
-    new(): DateSchema;
-}
+    new (): DateSchema;
+  }
 
-export interface DateSchema extends Schema<Date> {
+  export interface DateSchema extends Schema<Date> {
     min(limit: Date | string | Ref, message?: string): DateSchema;
     max(limit: Date | string | Ref, message?: string): DateSchema;
-}
+  }
 
-export interface ArraySchemaConstructor {
+  export interface ArraySchemaConstructor {
     <T>(schema?: Schema<T>): ArraySchema<T>;
-    new(): ArraySchema<{}>;
-}
+    new (): ArraySchema<{}>;
+  }
 
-export interface ArraySchema<T> extends Schema<T[]> {
+  export interface ArraySchema<T> extends Schema<T[]> {
     of<U>(type: Schema<U>): ArraySchema<U>;
     min(limit: number | Ref, message?: string): ArraySchema<T>;
     max(limit: number | Ref, message?: string): ArraySchema<T>;
     ensure(): ArraySchema<T>;
     compact(rejector: (value: any) => boolean): ArraySchema<T>;
-}
+  }
 
-export interface ObjectSchemaConstructor {
+  export interface ObjectSchemaConstructor {
     <T>(fields?: { [field in keyof T]: Schema<T[field]> }): ObjectSchema<T>;
-    new(): ObjectSchema<{}>;
-}
+    new (): ObjectSchema<{}>;
+  }
 
-export interface ObjectSchema<T> extends Schema<T> {
-    shape(fields: { [field in keyof T]: Schema<T[field]> }, noSortEdges?: Array<[string, string]>): ObjectSchema<T>;
+  export interface ObjectSchema<T> extends Schema<T> {
+    shape(
+      fields: { [field in keyof T]: Schema<T[field]> },
+      noSortEdges?: Array<[string, string]>
+    ): ObjectSchema<T>;
     from(fromKey: string, toKey: string, alias?: boolean): ObjectSchema<T>;
     noUnknown(onlyKnownKeys?: boolean, message?: string): ObjectSchema<T>;
     transformKeys(callback: (key: any) => any): void;
     camelCase(): ObjectSchema<T>;
     constantCase(): ObjectSchema<T>;
-}
+  }
 
-export type TransformFunction<T> = ((this: T, value: any, originalValue: any) => any);
+  export type TransformFunction<T> = ((
+    this: T,
+    value: any,
+    originalValue: any
+  ) => any);
 
-export interface WhenOptionsBuilder<T> {
+  export interface WhenOptionsBuilder<T> {
     (value: any, schema: T): T;
     (v1: any, v2: any, schema: T): T;
     (v1: any, v2: any, v3: any, schema: T): T;
     (v1: any, v2: any, v3: any, v4: any, schema: T): T;
-}
+  }
 
-export type WhenOptions<T> = WhenOptionsBuilder<T>
-    | { is: boolean | ((value: any) => boolean), then: any, otherwise: any }
+  export type WhenOptions<T> =
+    | WhenOptionsBuilder<T>
+    | { is: boolean | ((value: any) => boolean); then: any; otherwise: any }
     | object;
 
-export interface TestContext {
+  export interface TestContext {
     path: string;
     options: ValidateOptions;
     parent: any;
     schema: Schema<any>;
-    createError: (params: { path: string, message: string }) => ValidationError;
-}
+    createError: (params: { path: string; message: string }) => ValidationError;
+  }
 
-export interface ValidateOptions {
+  export interface ValidateOptions {
     /**
      * Only validate the input, and skip and coercion or transformation. Default - false
      */
@@ -190,9 +222,9 @@ export interface ValidateOptions {
      * Any context needed for validating schema conditions (see: when())
      */
     context?: object;
-}
+  }
 
-export interface TestOptions {
+  export interface TestOptions {
     /**
      * Unique name identifying the test
      */
@@ -217,16 +249,16 @@ export interface TestOptions {
      * Mark the test as exclusive, meaning only one of the same can be active at once
      */
     exclusive?: boolean;
-}
+  }
 
-export interface SchemaDescription {
+  export interface SchemaDescription {
     type: string;
     label: string;
     meta: object;
     tests: string[];
-}
+  }
 
-export interface ValidationError {
+  export interface ValidationError {
     name: string;
     message: string;
     value: any;
@@ -245,17 +277,16 @@ export interface ValidationError {
      */
     inner: ValidationError[];
     params?: object;
-}
+  }
 
-export interface Ref {
+  export interface Ref {
     [key: string]: any;
-}
+  }
 
-// tslint:disable-next-line:no-empty-interface
-export interface Lazy extends Schema<any> {
-}
+  // tslint:disable-next-line:no-empty-interface
+  export interface Lazy extends Schema<any> {}
 
-export interface LocaleObject {
+  export interface LocaleObject {
     mixed?: { [key in keyof MixedSchema]?: string };
     string?: { [key in keyof StringSchema]?: string };
     number?: { [key in keyof NumberSchema]?: string };
@@ -264,4 +295,5 @@ export interface LocaleObject {
     date?: { [key in keyof DateSchema]?: string };
     array?: { [key in keyof ArraySchema<any>]?: string };
     object?: { [key in keyof ObjectSchema<any>]?: string };
+  }
 }
